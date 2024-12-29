@@ -1,75 +1,101 @@
 import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { navbarData } from "./NavbarData";
+import { IKImage } from "imagekitio-react";
+import Image from "./Image";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
 
   return (
-    <nav className="bg-white shadow-lg fixed w-full top-0 left-0 z-50">
-      <div className="w-max-7xl mx-auto px-4 sm:px-6 lg:px-8 container">
-        <div className="flex justify-between items-center h-20">
-          <div>
-            <Link
-              to="/"
-              className="flex items-center gap-2 text-xl md:text-2xl font-bold"
-            >
-              <img
-                src="logo.png"
-                alt="Scroll Nest"
-                className="w-12 h-12 md:w-20 md:h-20 rounded-full"
-              />
-              <span className="hidden sm:inline">ScrollNest</span>
-            </Link>
-          </div>
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8 font-medium">
-            {navbarData.map((link, index) => (
-              <Link
-                key={index}
-                to={link.href}
-                className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300"
-              >
-                {link.title}
-              </Link>
-            ))}
-          </div>
+    <nav className="w-full h-20 md:h-24 flex items-center justify-between border-b">
+      <Link to="/" className="flex items-center gap-4 text-2xl  font-bold">
+        <Image src="logo.png" alt="scrollnest logo" w={60} h={60} />
+        <span className="hidden sm:inline">ScrollNest</span>
+      </Link>
+      {/* mobile */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setToggle(!toggle)}
+          className="p-2"
+          aria-label="Toggle menu"
+        >
+          {toggle ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
 
-          {/* Toggle Button for Mobile */}
-          <div className="md:hidden flex items-center">
-            <button
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-indigo-600 focus:outline-none transition-colors duration-300"
-              onClick={() => setToggle(!toggle)}
-              aria-label={toggle ? "Close menu" : "Open menu"}
-            >
-              {toggle ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          <div
-            className={`md:hidden transition-all duration-300 ease-in-out ${
-              toggle ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-            } overflow-hidden`}
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
-              {navbarData.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="block text-gray-600 hover:text-indigo-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
+        {/* Mobile Menu Overlay */}
+        {toggle && (
+          <div className="fixed inset-0 bg-white z-50">
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b">
+                <Link
+                  to="/"
+                  className="flex items-center gap-4 text-2xl font-bold"
+                  onClick={() => setToggle(false)}
                 >
-                  {item.title}
-                </a>
-              ))}
+                  <img
+                    src="logo.png"
+                    alt="Scroll Nest"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <span>ScrollNest</span>
+                </Link>
+                <button
+                  onClick={() => setToggle(false)}
+                  className="p-2"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="flex flex-col p-4 gap-6 text-lg">
+                <Link
+                  to="/"
+                  className="hover:text-blue-800 transition-colors"
+                  onClick={() => setToggle(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/posts"
+                  className="hover:text-blue-800 transition-colors"
+                  onClick={() => setToggle(false)}
+                >
+                  Posts
+                </Link>
+                <Link
+                  to="/about"
+                  className="hover:text-blue-800 transition-colors"
+                  onClick={() => setToggle(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  to="/signin"
+                  className="py-2 px-4 rounded-full bg-blue-800 text-white text-center"
+                  onClick={() => setToggle(false)}
+                >
+                  Signin
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+      </div>
+      {/* desktop */}
+      <div className="hidden md:flex items-center gap-8 xl:gap-12 font-medium">
+        <Link to="/">Home</Link>
+        <Link to="/posts">Posts</Link>
+        <Link to="/">About</Link>
+        <Link
+          to="/signin"
+          className="py-2 px-4 rounded-full bg-blue-800 text-white"
+        >
+          Signin
+        </Link>
       </div>
     </nav>
   );
